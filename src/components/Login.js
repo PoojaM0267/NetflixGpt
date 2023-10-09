@@ -1,11 +1,19 @@
 import React, { useState, useRef } from 'react';
 import Header from './Header';
+import { useNavigate } from 'react-router-dom';
 import { checkValidSignInForm, checkValidSignUpForm} from '../utils/validate'; 
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile} from 'firebase/auth';
+import { auth } from "../utils/firebase";
+import { useDispatch } from 'react-redux';
+import {addUser } from "../utils/userSlice";
 
 const Login = () => {
 
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // useRef Hook - used to reference some form element
   const email = useRef(null);
@@ -22,12 +30,67 @@ const Login = () => {
     if(!isSignInForm){      
       const message = checkValidSignUpForm(name.current.value, email.current.value, password.current.value);
       setErrorMessage(message);
+      if(message) return;
+
+      // create new user      
+        createNewUser(email.current.value, password.current.value, name.current.value);
+        
     }
     else{
       const message = checkValidSignInForm(email.current.value, password.current.value);
       setErrorMessage(message);
-    }
+      if(message) return;
 
+      loginUser(email.current.value, password.current.value);
+
+    }
+  }
+
+  const createNewUser = (email, password) => {
+
+    createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      console.log(user);
+      // Update User's name
+      updateProfile(user, {
+        displayName: name.current.value, photoURL: "https://wallpapers.com/images/high/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.webp"
+      }).then(() => {
+        // Profile updated!
+        console.log("User Profile name updated!");
+        const {uid, email,displayName, photoURL } = auth.currentUser;              
+        dispatch(addUser({uid: uid, email: email, displayName: displayName, photoURL : photoURL}));
+
+        navigate("/browse");
+
+      }).catch((error) => {
+        handleAuthError(error);
+      });
+
+    })
+    .catch((error) => {
+      handleAuthError(error);
+    });
+
+  }
+
+  const loginUser = (email, password) => {
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      console.log(user);
+      navigate("/browse");
+
+    })
+    .catch((error) => {
+      handleAuthError(error);
+    })
+  }
+
+  const handleAuthError = (error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    setErrorMessage(errorCode + " : " +errorMessage);
   }
 
   return (
