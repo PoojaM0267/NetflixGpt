@@ -1,18 +1,17 @@
 import React, { useState, useRef } from 'react';
 import Header from './Header';
-import { useNavigate } from 'react-router-dom';
 import { checkValidSignInForm, checkValidSignUpForm} from '../utils/validate'; 
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile} from 'firebase/auth';
 import { auth } from "../utils/firebase";
 import { useDispatch } from 'react-redux';
 import {addUser } from "../utils/userSlice";
+import { USER_AVATAR } from '../utils/constants';
 
 const Login = () => {
 
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // useRef Hook - used to reference some form element
@@ -54,14 +53,12 @@ const Login = () => {
       console.log(user);
       // Update User's name
       updateProfile(user, {
-        displayName: name.current.value, photoURL: "https://wallpapers.com/images/high/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.webp"
+        displayName: name.current.value, photoURL: USER_AVATAR
       }).then(() => {
         // Profile updated!
         console.log("User Profile name updated!");
         const {uid, email,displayName, photoURL } = auth.currentUser;              
         dispatch(addUser({uid: uid, email: email, displayName: displayName, photoURL : photoURL}));
-
-        navigate("/browse");
 
       }).catch((error) => {
         handleAuthError(error);
@@ -79,8 +76,6 @@ const Login = () => {
     .then((userCredential) => {
       const user = userCredential.user;
       console.log(user);
-      navigate("/browse");
-
     })
     .catch((error) => {
       handleAuthError(error);
