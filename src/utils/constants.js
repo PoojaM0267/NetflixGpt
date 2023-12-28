@@ -4,6 +4,7 @@ export const NETFLIX_LOGO = "https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-
 
 export const USER_AVATAR = "https://wallpapers.com/images/high/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.webp";
 
+export const BG_URL = "https://assets.nflxext.com/ffe/siteui/vlv3/893a42ad-6a39-43c2-bbc1-a951ec64ed6d/6f4a54e8-cd9d-47fd-a89b-4a8041b7bb23/CA-en-20231002-popsignuptwoweeks-perspective_alpha_website_large.jpg";
 
 export const API_OPTIONS =  {
     method: 'GET',
@@ -17,3 +18,18 @@ export const API_OPTIONS =  {
   export const POPULAR_MOVIES_URL = "https://api.themoviedb.org/3/movie/popular?page=1";
 
   export const IMAGE_CDN = "https://image.tmdb.org/t/p/w500/";
+
+  export const SUPPORTED_LANGUAGES = [
+    {
+      identifier : "en",
+      name : "English"
+    },
+    {
+      identifier : "hindi",
+      name : "Hindi"
+    },
+    {
+      identifier : "spanish",
+      name : "Spanish"
+    }
+  ]

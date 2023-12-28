@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfi
 import { auth } from "../utils/firebase";
 import { useDispatch } from 'react-redux';
 import {addUser } from "../utils/userSlice";
-import { USER_AVATAR } from '../utils/constants';
+import { BG_URL, USER_AVATAR } from '../utils/constants';
 
 const Login = () => {
 
@@ -92,7 +92,7 @@ const Login = () => {
     <div>
         <Header />
         <div className='absolute'>
-            <img src="https://assets.nflxext.com/ffe/siteui/vlv3/893a42ad-6a39-43c2-bbc1-a951ec64ed6d/6f4a54e8-cd9d-47fd-a89b-4a8041b7bb23/CA-en-20231002-popsignuptwoweeks-perspective_alpha_website_large.jpg" alt="logo"/>
+            <img src={BG_URL} alt="logo"/>
         </div>
 
         <form onSubmit={(e) => e.preventDefault()} className='absolute p-12 bg-[#000000] w-4/12 my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80'>
